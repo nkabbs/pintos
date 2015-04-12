@@ -1,4 +1,5 @@
 #include "kernel/process.h"
+#include "kernel/process.h"
 #include <debug.h>
 #include <inttypes.h>
 #include <round.h>
@@ -17,6 +18,7 @@
 #include "kernel/palloc.h"
 #include "kernel/thread.h"
 #include "kernel/vaddr.h"
+#include "vm/spt.c"
 
 static thread_func start_process NO_RETURN;
 static bool load (const char *file_args, void (**eip) (void), void **esp);
@@ -211,7 +213,7 @@ process_activate (void)
 
   /* Activate thread's page tables. */
   pagedir_activate (t->pagedir);
-
+  //spt_activate (t->spt);
   /* Set thread's kernel stack for use in processing
      interrupts. */
   tss_update ();
@@ -512,7 +514,7 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 
 /* Create a minimal stack by mapping a zeroed page at the top of
    user virtual memory. */
-static bool
+static  bool
 setup_stack (void **esp, const char *file_args)
 {
   uint8_t *kpage;

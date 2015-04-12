@@ -13,6 +13,10 @@ include ../../tests/Make.tests
 # Compiler and assembler options.
 kernel.bin: CPPFLAGS += -I$(SRCDIR)/lib/kernel
 
+#UPDATE
+vm_SRC = vm/frames.c
+vm_SRC = vm/fifo_frames.c
+
 # Core kernel.
 kernel_SRC  = kernel/start.S		# Startup code.
 kernel_SRC += kernel/init.c		# Main program.

@@ -18,6 +18,7 @@
 #include "kernel/palloc.h"
 #include "kernel/thread.h"
 #include "kernel/vaddr.h"
+#include "vm/frames.c"
 #include "vm/spt.c"
 
 static thread_func start_process NO_RETURN;
@@ -485,8 +486,14 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
       size_t page_zero_bytes = PGSIZE - page_read_bytes;
 
       /* Get a page of memory. */
-      uint8_t *kpage = palloc_get_page (PAL_USER);
-      if (kpage == NULL)
+      //uint8_t *kpage = palloc_get_page (PAL_USER);
+      void *kpage = getFrames(PAL_USER, 1);
+
+
+
+
+
+	if (kpage == NULL)
         return false;
 
       /* Load this page. */
@@ -517,7 +524,8 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 static  bool
 setup_stack (void **esp, const char *file_args)
 {
-  uint8_t *kpage;
+ // uint8_t *kpage;
+  void *kpage;
   char *esp_char;
   unsigned int *esp_uint;
   int *esp_int;
@@ -525,7 +533,8 @@ setup_stack (void **esp, const char *file_args)
   int argc = 0;
   bool success = false;
 
-  kpage = palloc_get_page (PAL_USER | PAL_ZERO);
+ // kpage = palloc_get_page (PAL_USER | PAL_ZERO);
+  kpage = getFrames(PAL_USER, 1);
   if (kpage != NULL) 
     {
       success = install_page (((uint8_t *) PHYS_BASE) - PGSIZE, kpage, true);

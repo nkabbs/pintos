@@ -11,6 +11,11 @@
 #include "kernel/synch.h"
 #include "kernel/vaddr.h"
 
+//UPDATED
+#include "kernel/pagedir.h"
+#include "kernel/thread.h"
+
+
 /* Page allocator.  Hands out memory in page-size (or
    page-multiple) chunks.  See malloc.h for an allocator that
    hands out smaller chunks.
@@ -96,7 +101,10 @@ palloc_get_multiple (enum palloc_flags flags, size_t page_cnt)
       if (flags & PAL_ASSERT)
         PANIC ("palloc_get: out of pages");
     }
-
+  struct thread *currThread = thread_current();
+  uint32_t *pd = currThread ->pagedir;
+  void *physAddr = pagedir_get_page(pd, pages);
+  printf("ld\n\n\n\n\n\n\n", (void *)physAddr);
   return pages;
 }
 

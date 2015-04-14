@@ -7,7 +7,7 @@
 while updating a global frame table and implementing an 
 eviction strategy if there are no frames to give out */
 
-
+//in frame.h
 /*struct frame{
 	void *frame;
 	void *page;
@@ -20,11 +20,12 @@ struct frame *clockPtr;
 struct frame *evicted;
 //struct frame frameTable[383];
 
-int numFrames = 383;
+unsigned int numFrames = 383;
 const int frameSize = 4096;
 int mappedFrames = 0;
 int neverCalled = 1;
 
+void initializeFrameTable(void);
 
 //malloc frame table?
 void *getFrames(enum palloc_flags flags, size_t page_cnt){

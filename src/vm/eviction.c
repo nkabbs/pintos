@@ -7,10 +7,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "vm/eviction.h"
-
 #include "vm/frames.h"
+
 int next_evicted = 0;
 int frames = 383;
+
+
+//struct frame *fifo_out(int num_frames_needed);
+void evict(struct frame *toEvict, int page_cnt);
+
+
+
 /* This function chooses the next frame in the frame table to evict.
  *  It simply goes through the frames in numerical order and selects 
  *  the next frame.  

@@ -24,6 +24,12 @@ enum pageType{
 	fileSysToPhysMem;
 }*/
 
+void setUp();
+void update(void *vaddr, enum updateType type);
+void *resourceToFree();
+bool lessFunction(const struct hash_elem *one, const struct hash_elem *two, void *aux);
+unsigned hashFunction(const struct hash_elem *e, void *aux);
+
 void updateSPT(void *vaddr, enum updateType type){
 	struct thread *currThread = thread_current();
 	bool uninitialized = currThread->sptUninitialized; //ADD TO THREAD STRUCT

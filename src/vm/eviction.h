@@ -3,7 +3,7 @@
 
 //#include "vm/frames.h"
 
-//struct frame *fifo_out(int num_frames_needed);
+struct frame *fifo_out(int num_frames_needed);
 //void evict(struct frame *toEvict, int page_cnt);
 
 

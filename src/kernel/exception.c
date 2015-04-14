@@ -169,5 +169,54 @@ page_fault (struct intr_frame *f)
   printf("There is no crying in Pintos!\n");
 
   kill (f);
+
+	/* TENTATIVE PAGE FAULT HANDLING
+	
+	if (not_present && user){
+		struct thread *currThread = thread_current();	//include thread.h
+		struct hash *hashTable = currThread->spt	//include hash.h
+		stuct sptEntry *compareToEntry;
+		compareToEntry->vaddr = fault_addr;
+		struct hash_elem *e = hash_find(hashTable, compareToEntry->hash_elem);
+		if (!e){
+			return NULL;
+		} else {
+			return hash_entry(e, struct sptEntry, hash_elem);
+		}
+	}
+	
+	if (not present & user page)
+		check supplemental page table
+		if (in file sys)
+			if (! getFrame)
+				fifo_out
+				evict
+			load
+		if (in swap space)
+			if (! getFrame)
+				fifo_out
+				evict	
+			load
+		if (stack page)	
+			if (! getFrame)
+				fifo_out
+				evict
+			grow stack (to an extent)
+			mark as stack page
+		else
+			kill
+		udpate supplemental page table
+	
+
+	else (not a user page)
+		kill?
+
+	kil >>> release all memory
+	*/
+
 }
+
+
+
+
 

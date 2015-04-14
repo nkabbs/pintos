@@ -15,7 +15,8 @@ kernel.bin: CPPFLAGS += -I$(SRCDIR)/lib/kernel
 
 #UPDATE
 vm_SRC = vm/frames.c
-vm_SRC = vm/fifo_frames.c
+vm_SRC += vm/eviction.c
+
 
 # Core kernel.
 kernel_SRC  = kernel/start.S		# Startup code.

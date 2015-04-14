@@ -1,35 +1,53 @@
-#include "frames.c"
-#include "thread.h"
+#include "frames.h"
+#include "kernel/thread.h"
 #include "hash.h"
+#include "spt.h"
 
 struct sptEntry{
 	bool isStackPage;
-	bool isSwapped;
-	bool inFileSys;
+	enum pageType;
 	void *vaddr;
+	int sectorOffset;
 	struct hash_elem hash_elem;
 }
 
-updateSPT(void *vaddr){
+
+enum pageType{
+	swap,
+	fileSys,
+	physMem
+};
+
+/*enum updateType{
+	physMemToSwap;
+	physMemToFileSys;
+	fileSysToPhysMem;
+}*/
+
+void updateSPT(void *vaddr, enum updateType type){
 	struct thread *currThread = thread_current();
 	bool uninitialized = currThread->sptUninitialized; //ADD TO THREAD STRUCT
 	if (uninitialized){
 		setUp();
 		currThread->sptUninitialized = 0;
 	}
-	update();
+	update(vaddr, type);
 }
 
 // First time called, we need to setup a hash table for the thread
-setUp(){
+void setUp(){
 	struct thread *currThread = thread_current();
 	struct hash *threadSPT;
 	hash_init(threadSPT, &hashFunction, &lessFunction, NULL);
-	currThread->spt = threadSpt;
+	currThread->spt = threadSPT;
 }
 
-update(){
-
+void update(void *vaddr, enum updateType type){
+	//spt entry = hash find vaddr
+//	struct hash_elem *e = hash_entry(      )
+//	if (type == physMemToSwap){
+//		
+//	}
 }
 
 void *resourceToFree(){

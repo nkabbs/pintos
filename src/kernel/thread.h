@@ -135,6 +135,8 @@ struct thread
     /* Owned by kernel/process.c. */
     uint32_t *pagedir;                  /* Page directory. */
     uint32_t *spt;			/* Supplemental page table. */
+    //this has not been initialized
+    bool sptUninitialized;		/* Has the spt been set up?  */
 #endif
 
     /* Owned by thread.c. */

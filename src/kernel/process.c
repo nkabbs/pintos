@@ -1,5 +1,4 @@
 #include "kernel/process.h"
-#include "kernel/process.h"
 #include <debug.h>
 #include <inttypes.h>
 #include <round.h>
@@ -16,10 +15,10 @@
 #include "kernel/init.h"
 #include "kernel/interrupt.h"
 #include "kernel/palloc.h"
-#include "kernel/thread.h"
+//#include "kernel/thread.h"
 #include "kernel/vaddr.h"
-#include "vm/frames.c"
-#include "vm/spt.c"
+#include "vm/eviction.h" //changed from frames.h
+//#include "vm/spt.c"
 
 static thread_func start_process NO_RETURN;
 static bool load (const char *file_args, void (**eip) (void), void **esp);
@@ -487,7 +486,8 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 
       /* Get a page of memory. */
       //uint8_t *kpage = palloc_get_page (PAL_USER);
-      void *kpage = getFrames(PAL_USER, 1);
+        size_t one = 1;
+	void *kpage = getFrames(PAL_USER, one);
 
 
 

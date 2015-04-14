@@ -1,26 +1,27 @@
-#include "kernel/palloc.h"
 #include "kernel/pagedir.h"
-#include "kernel/thread.h"
+#include "vm/eviction.h"
 #include <stdio.h>
+#include "vm/frames.h"
 
 /* Wrapper for page allocator, calls palloc to hand out memory,
 while updating a global frame table and implementing an 
 eviction strategy if there are no frames to give out */
 
 
-struct frame{
+/*struct frame{
 	void *frame;
 	void *page;
+	struct thread *owner;
 	bool used;
 	//need more info?
-};
+};*/
 
 struct frame *clockPtr;
 struct frame *evicted;
-struct frame frameTable[383];
+//struct frame frameTable[383];
 
+int numFrames = 383;
 const int frameSize = 4096;
-const int numFrames = 383;
 int mappedFrames = 0;
 int neverCalled = 1;
 
@@ -37,9 +38,8 @@ void *getFrames(enum palloc_flags flags, size_t page_cnt){
 	}
 	void *virtAddr = palloc_get_multiple(flags, page_cnt);
 	if (!virtAddr){	//null was returned from palloc, handle eviction
-		//eviction here
-//		evicted = evict();
-
+		struct frame *toEvict = fifo_out(page_cnt);
+		evict(toEvict, page_cnt);
 		virtAddr = palloc_get_multiple(flags, page_cnt);
 		if (!virtAddr){
 			printf("Eviction failed");
@@ -83,6 +83,7 @@ void updateFrameTable(void *virtAddr, size_t page_cnt, bool frameMapped, enum pa
 			frameTable[mappedFrames].frame = physAddr;
 			frameTable[mappedFrames].page = virtAddr;
 			frameTable[mappedFrames].used = 1;
+			frameTable[mappedFrames].owner = thread_current();
 			mappedFrames += 1;
 		}
 		//move vitual address forward one page size in case we are mapping more than

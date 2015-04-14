@@ -529,7 +529,7 @@ sub get_scratch_file {
 # Runs the selected simulator.
 sub run_vm {
     if ($sim eq 'bochs') {
-	run_bochs ();
+	run_qemu ();
     } elsif ($sim eq 'qemu') {
 	run_qemu ();
     } elsif ($sim eq 'player') {
@@ -619,7 +619,7 @@ sub run_qemu {
     print "warning: qemu doesn't support jitter\n"
       if defined $jitter;
     my (@cmd) = ('qemu');
-    push (@cmd, '-no-kqemu');
+    #push (@cmd, '-no-kqemu');
     push (@cmd, '-hda', $disks[0]) if defined $disks[0];
     push (@cmd, '-hdb', $disks[1]) if defined $disks[1];
     push (@cmd, '-hdc', $disks[2]) if defined $disks[2];

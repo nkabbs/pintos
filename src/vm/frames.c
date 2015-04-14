@@ -2,6 +2,7 @@
 #include "vm/eviction.h"
 #include <stdio.h>
 #include "vm/frames.h"
+#include "lib/string.h"
 
 /* Wrapper for page allocator, calls palloc to hand out memory,
 while updating a global frame table and implementing an 
@@ -76,7 +77,7 @@ void updateFrameTable(void *virtAddr, size_t page_cnt, bool frameMapped, enum pa
 	for (i = 0; i < page_cnt; i++){
 		void *physAddr = pagedir_get_page(pd, virtAddr);
 		if (flags & PAL_ZERO){
-			memset(physAddr, 0, frameSize); 
+			memset(physAddr, 0, (size_t)frameSize); 
 		}	
 		if (frameMapped){
 			evicted->page = virtAddr;

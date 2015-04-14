@@ -1,7 +1,7 @@
 #ifndef VM_SPT_H
 #define VM_SPT_H
 
-enum udpateType{
+enum updateType{
 	physMemToSwap,
 	physMemToFileSys,
 	fileSysToPhysMem

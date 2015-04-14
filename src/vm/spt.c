@@ -1,41 +1,42 @@
 #include "frames.h"
 #include "kernel/thread.h"
-#include "hash.h"
-#include "spt.h"
+#include "lib/kernel/hash.h"
+#include "vm/spt.h"
 
-struct sptEntry{
-	bool isStackPage;
-	enum pageType;
-	void *vaddr;
-	int sectorOffset;
-	struct hash_elem hash_elem;
-}
-
-
+//tells us where this page being stored
 enum pageType{
 	swap,
 	fileSys,
 	physMem
 };
 
+struct sptEntry{
+	bool isStackPage;
+	enum pageType type;
+	void *vaddr;
+	int sectorOffset;
+	struct hash_elem hash_elem;
+};
+
+
+//in spt.h
 /*enum updateType{
 	physMemToSwap;
 	physMemToFileSys;
 	fileSysToPhysMem;
 }*/
 
-void setUp();
+void setUp(void);
 void update(void *vaddr, enum updateType type);
-void *resourceToFree();
+void *resourceToFree(void);
 bool lessFunction(const struct hash_elem *one, const struct hash_elem *two, void *aux);
 unsigned hashFunction(const struct hash_elem *e, void *aux);
 
+//Will call on a page fault
 void updateSPT(void *vaddr, enum updateType type){
 	struct thread *currThread = thread_current();
-	bool uninitialized = currThread->sptUninitialized; //ADD TO THREAD STRUCT
-	if (uninitialized){
+	if (currThread->spt == NULL){
 		setUp();
-		currThread->sptUninitialized = 0;
 	}
 	update(vaddr, type);
 }

@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include "kernel/synch.h"
 #include "filesys/file.h"
+#include "lib/kernel/hash.h"
 
 /* States in a thread's life cycle. */
 enum thread_status
@@ -134,9 +135,7 @@ struct thread
 #ifdef USERPROG
     /* Owned by kernel/process.c. */
     uint32_t *pagedir;                  /* Page directory. */
-    uint32_t *spt;			/* Supplemental page table. */
-    //this has not been initialized
-    bool sptUninitialized;		/* Has the spt been set up?  */
+    struct hash *spt;			/* Supplemental page table. */
 #endif
 
     /* Owned by thread.c. */

@@ -488,6 +488,11 @@ init_thread (struct thread *t, const char *name, int priority)
   if (t->parent != NULL)
     list_push_back (&t->parent->live_children, &t->child_elem);
   list_push_back (&all_list, &t->allelem);
+
+#ifdef USERPROG
+  t->spt = NULL;
+#endif
+
 }
 
 /* Allocates a SIZE-byte frame at the top of thread T's stack and
